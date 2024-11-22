@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:project/provider/theme_provider.dart';
 import 'package:project/shared/loading.dart';
 import '../../services/auth.dart';
 import '../../shared/constants.dart';
@@ -26,13 +27,13 @@ class _SignInState extends ConsumerState<SignIn> {
   Widget build(BuildContext context) {
     final authService = ref.read(authServiceProvider.notifier);
     final isLoading = ref.watch(authServiceProvider); // Watch the loading state
+    final themeNotifier = ref.read(themeNotifierProvider.notifier);
+    final themeMode = ref.watch(themeNotifierProvider);
 
     return isLoading
         ? const Loading()
         : Scaffold(
-            backgroundColor: Colors.brown[100],
             appBar: AppBar(
-              backgroundColor: Colors.brown[400],
               elevation: 0.0,
               title: const Text('Sign in'),
               actions: [
@@ -42,7 +43,14 @@ class _SignInState extends ConsumerState<SignIn> {
                   },
                   icon: const Icon(Icons.person),
                   label: const Text('Register'),
-                )
+                ),
+                Switch(
+                  activeColor: Colors.white,
+                  value: themeMode == ThemeMode.dark,
+                  onChanged: (value) {
+                    themeNotifier.toggleTheme();
+                  },
+                ),
               ],
             ),
             body: Container(

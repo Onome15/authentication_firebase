@@ -1,3 +1,4 @@
+import 'package:project/provider/theme_provider.dart';
 import 'package:project/shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:project/shared/loading.dart';
@@ -33,7 +34,8 @@ class _RegisterState extends ConsumerState<Register> {
   Widget build(BuildContext context) {
     final authService = ref.read(authServiceProvider.notifier);
     final isLoading = ref.watch(authServiceProvider); // Watch the loading state
-
+    final themeNotifier = ref.read(themeNotifierProvider.notifier);
+    final themeMode = ref.watch(themeNotifierProvider);
     return isLoading
         ? const Loading()
         : Scaffold(
@@ -46,7 +48,14 @@ class _RegisterState extends ConsumerState<Register> {
                   },
                   icon: const Icon(Icons.person),
                   label: const Text('Sign in'),
-                )
+                ),
+                Switch(
+                  activeColor: Colors.white,
+                  value: themeMode == ThemeMode.dark,
+                  onChanged: (value) {
+                    themeNotifier.toggleTheme();
+                  },
+                ),
               ],
             ),
             body: Padding(

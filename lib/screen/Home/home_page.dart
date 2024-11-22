@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:project/provider/theme_provider.dart';
 import 'package:project/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,10 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isLoading = ref.watch(authServiceProvider); // Watch the loading state
+    final isLoading = ref.watch(authServiceProvider);
+    final themeNotifier = ref.read(themeNotifierProvider.notifier);
+    final themeMode =
+        ref.watch(themeNotifierProvider); // Watch the loading state
 
     return isLoading
         ? const Loading()
@@ -56,6 +60,12 @@ class HomePage extends ConsumerWidget {
                 IconButton(
                   icon: const Icon(Icons.logout),
                   onPressed: () => _showLogoutConfirmationDialog(context, ref),
+                ),
+                Switch(
+                  value: themeMode == ThemeMode.dark,
+                  onChanged: (value) {
+                    themeNotifier.toggleTheme();
+                  },
                 ),
               ],
             ),
