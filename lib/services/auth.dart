@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:project/shared/toast.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -159,6 +160,28 @@ class AuthService extends StateNotifier<bool> {
       showToast(message: e.toString());
     }
     return null;
+  }
+
+  /// Send a password reset email
+  Future<void> sendPasswordResetEmail(
+      String email, BuildContext context) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+      showToast(message: "Password reset email sent. Check your inbox.");
+      // ignore: use_build_context_synchronously
+      await Future.delayed(const Duration(seconds: 3));
+      Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'invalid-email') {
+        showToast(message: "Invalid email address.");
+      } else if (e.code == 'user-not-found') {
+        showToast(message: "No user found with that email.");
+      } else {
+        showToast(message: "An error occurred: ${e.message}");
+      }
+    } catch (e) {
+      showToast(message: "An unknown error occurred: $e");
+    }
   }
 
   /// Sign out the current user

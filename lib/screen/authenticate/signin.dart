@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project/provider/theme_provider.dart';
+import 'package:project/screen/authenticate/forget_password.dart';
 import 'package:project/shared/loading.dart';
 import '../../services/auth.dart';
 import '../../shared/constants.dart';
@@ -85,10 +86,17 @@ class _SignInState extends ConsumerState<SignIn> {
                         },
                       ),
                       const SizedBox(height: 10),
-                      const Align(
+                      Align(
                         alignment: Alignment.topRight,
-                        child: Text(
-                          'Forget Password?',
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ForgotPasswordPage()),
+                            );
+                          },
+                          child: const Text("Forgot Password?"),
                         ),
                       ),
                       const SizedBox(height: 10),
