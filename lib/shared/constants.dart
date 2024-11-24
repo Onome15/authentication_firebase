@@ -17,3 +17,16 @@ final textInputDecoration = InputDecoration(
         width: 2.0),
   ),
 );
+
+Widget switchButton(themeMode, themeNotifier) {
+  return IconButton(
+    icon: Icon(
+      themeMode == ThemeMode.dark ? Icons.nights_stay : Icons.wb_sunny,
+      color: themeMode == ThemeMode.dark ? Colors.white : Colors.black,
+    ),
+    onPressed: () {
+      themeNotifier.toggleTheme();
+    },
+    tooltip: 'Toggle Theme',
+  );
+}

@@ -41,22 +41,7 @@ class _RegisterState extends ConsumerState<Register> {
         : Scaffold(
             appBar: AppBar(
               title: const Text('Register'),
-              actions: [
-                ElevatedButton.icon(
-                  onPressed: () {
-                    widget.toggleView();
-                  },
-                  icon: const Icon(Icons.person),
-                  label: const Text('Sign in'),
-                ),
-                Switch(
-                  activeColor: Colors.white,
-                  value: themeMode == ThemeMode.dark,
-                  onChanged: (value) {
-                    themeNotifier.toggleTheme();
-                  },
-                ),
-              ],
+              actions: [switchButton(themeMode, themeNotifier)],
             ),
             body: Padding(
               padding:
@@ -68,6 +53,7 @@ class _RegisterState extends ConsumerState<Register> {
                     TextFormField(
                       controller: userNameController,
                       decoration: textInputDecoration.copyWith(
+                          prefixIcon: const Icon(Icons.person),
                           hintText: 'Enter your Username',
                           labelText: 'Username'),
                       validator: (value) {
@@ -81,6 +67,7 @@ class _RegisterState extends ConsumerState<Register> {
                     TextFormField(
                       controller: emailController,
                       decoration: textInputDecoration.copyWith(
+                          prefixIcon: const Icon(Icons.email),
                           hintText: 'Enter your email address',
                           labelText: 'Email'),
                       keyboardType: TextInputType.emailAddress,
@@ -95,6 +82,7 @@ class _RegisterState extends ConsumerState<Register> {
                     TextFormField(
                       controller: passwordController,
                       decoration: textInputDecoration.copyWith(
+                          prefixIcon: const Icon(Icons.lock),
                           hintText: 'Enter your password',
                           labelText: 'Password'),
                       obscureText: true,
@@ -109,6 +97,7 @@ class _RegisterState extends ConsumerState<Register> {
                     TextFormField(
                       controller: confirmPasswordController,
                       decoration: textInputDecoration.copyWith(
+                          prefixIcon: const Icon(Icons.lock),
                           hintText: 'Re-enter your password',
                           labelText: 'Confirm Password'),
                       obscureText: true,
@@ -122,19 +111,32 @@ class _RegisterState extends ConsumerState<Register> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          await authService.registerWithEmailAndPassword(
-                            emailController.text.trim(),
-                            passwordController.text.trim(),
-                            userNameController.text.trim(),
-                          );
-                        }
-                      },
-                      child: const Text('Register'),
+                    const SizedBox(
+                      height: 20,
                     ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            await authService.registerWithEmailAndPassword(
+                              emailController.text.trim(),
+                              passwordController.text.trim(),
+                              userNameController.text.trim(),
+                            );
+                          }
+                        },
+                        child: const Text('Register'),
+                      ),
+                    ),
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      const Text('Already have an account?'),
+                      TextButton(
+                          onPressed: () {
+                            widget.toggleView();
+                          },
+                          child: const Text("SIGN IN"))
+                    ])
                   ],
                 ),
               ),

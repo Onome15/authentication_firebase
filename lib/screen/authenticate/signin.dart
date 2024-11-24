@@ -44,13 +44,7 @@ class _SignInState extends ConsumerState<SignIn> {
                   icon: const Icon(Icons.person),
                   label: const Text('Register'),
                 ),
-                Switch(
-                  activeColor: Colors.white,
-                  value: themeMode == ThemeMode.dark,
-                  onChanged: (value) {
-                    themeNotifier.toggleTheme();
-                  },
-                ),
+                switchButton(themeMode, themeNotifier)
               ],
             ),
             body: Container(
@@ -64,6 +58,7 @@ class _SignInState extends ConsumerState<SignIn> {
                       TextFormField(
                         controller: emailController,
                         decoration: textInputDecoration.copyWith(
+                            prefixIcon: const Icon(Icons.email),
                             hintText: 'Enter your email address',
                             labelText: 'Email'),
                         keyboardType: TextInputType.emailAddress,
@@ -78,6 +73,7 @@ class _SignInState extends ConsumerState<SignIn> {
                       TextFormField(
                         controller: passwordController,
                         decoration: textInputDecoration.copyWith(
+                            prefixIcon: const Icon(Icons.lock),
                             hintText: 'Enter your password',
                             labelText: 'Password'),
                         obscureText: true,
@@ -88,22 +84,48 @@ class _SignInState extends ConsumerState<SignIn> {
                           return null;
                         },
                       ),
+                      const SizedBox(height: 10),
+                      const Align(
+                        alignment: Alignment.topRight,
+                        child: Text(
+                          'Forget Password?',
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                await authService.signInWithEmailAndPassword(
+                                    emailController.text.trim(),
+                                    passwordController.text.trim());
+                              }
+                            },
+                            child: const Text('Sign in')),
+                      ),
                       const SizedBox(height: 20),
-                      ElevatedButton(
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              await authService.signInWithEmailAndPassword(
-                                  emailController.text.trim(),
-                                  passwordController.text.trim());
-                            }
-                          },
-                          child: const Text('Sign in')),
-                      ElevatedButton(
-                          onPressed: authService.signInAnon,
-                          child: const Text('Sign in Anonymous')),
-                      ElevatedButton(
-                          onPressed: authService.signInWithGoogle,
-                          child: const Text('Sign in with google')),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          InkWell(
+                            onTap: authService.signInWithFacebook,
+                            child: Image.asset(
+                              'assets/signin/facebook.png',
+                              width: 50, // Adjust the size as needed
+                              height: 50,
+                            ),
+                          ),
+                          InkWell(
+                            onTap: authService.signInWithGoogle,
+                            child: Image.asset(
+                              'assets/signin/google.png',
+                              width: 50, // Adjust the size as needed
+                              height: 50,
+                            ),
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 )),

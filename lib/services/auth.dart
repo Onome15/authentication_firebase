@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:project/shared/toast.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class AuthService extends StateNotifier<bool> {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -131,7 +132,34 @@ class AuthService extends StateNotifier<bool> {
     return null;
   }
 
-  /// Other methods (e.g., register, signInWithEmailAndPassword, etc.)
+  Future<User?> signInWithFacebook() async {
+    try {
+      // Trigger the Facebook sign-in flow
+      final LoginResult result = await FacebookAuth.instance.login();
+
+      // Check if the login was successful
+      if (result.status == LoginStatus.success) {
+        final AccessToken? accessToken = result.accessToken;
+
+        // Create a credential for Firebase Authentication
+        final OAuthCredential facebookAuthCredential =
+            FacebookAuthProvider.credential(accessToken!.tokenString);
+
+        // Sign in to Firebase with the credential
+        UserCredential userCredential =
+            await _firebaseAuth.signInWithCredential(facebookAuthCredential);
+
+        return userCredential.user;
+      } else if (result.status == LoginStatus.cancelled) {
+        throw Exception('Login cancelled by user.');
+      } else {
+        throw Exception('Login failed: ${result.message}');
+      }
+    } catch (e) {
+      showToast(message: e.toString());
+    }
+    return null;
+  }
 
   /// Sign out the current user
   Future<void> signOut() async {

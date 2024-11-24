@@ -4,6 +4,7 @@ import 'package:project/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../shared/constants.dart';
 import '../../shared/loading.dart';
 
 class HomePage extends ConsumerWidget {
@@ -61,12 +62,7 @@ class HomePage extends ConsumerWidget {
                   icon: const Icon(Icons.logout),
                   onPressed: () => _showLogoutConfirmationDialog(context, ref),
                 ),
-                Switch(
-                  value: themeMode == ThemeMode.dark,
-                  onChanged: (value) {
-                    themeNotifier.toggleTheme();
-                  },
-                ),
+                switchButton(themeMode, themeNotifier)
               ],
             ),
             body: Center(

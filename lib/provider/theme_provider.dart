@@ -17,42 +17,56 @@ final themeNotifierProvider = StateNotifierProvider<ThemeNotifier, ThemeMode>(
 
 final lightTheme = ThemeData(
   brightness: Brightness.light,
-  primarySwatch: Colors.red,
+  primarySwatch: Colors.blue,
+  colorScheme: ColorScheme.fromSwatch(
+    primarySwatch: Colors.blue,
+    brightness: Brightness.light, // Match ThemeData.brightness
+  ).copyWith(
+    surface: Colors.white, // Background color for loading widget
+    primary: Colors.blue[200],
+    secondary: Colors.white30, // Spinner color for loading widget
+  ),
   appBarTheme: AppBarTheme(
     color: Colors.blue[200],
-    foregroundColor: Colors.black, // Default AppBar text color
+    foregroundColor: Colors.black,
   ),
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
-      foregroundColor:
-          Colors.black, // Default text color for TextButton in light mode
+      foregroundColor: Colors.black,
     ),
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
-      backgroundColor: Colors.blue[100],
-      foregroundColor: Colors.black,
-    ),
+        backgroundColor: Colors.blue[100],
+        foregroundColor: Colors.black,
+        textStyle: const TextStyle(fontSize: 20)),
   ),
 );
 
 final darkTheme = ThemeData(
-    brightness: Brightness.dark,
+  brightness: Brightness.dark,
+  primarySwatch: Colors.grey,
+  colorScheme: ColorScheme.fromSwatch(
     primarySwatch: Colors.grey,
-    appBarTheme: AppBarTheme(
-      color: Colors.grey[900],
-      foregroundColor: Colors.white, // Default AppBar text color
+    brightness: Brightness.dark, // Match ThemeData.brightness
+  ).copyWith(
+    surface: Colors.grey[800],
+    primary: Colors.white, // Spinner color for loading widget
+    secondary: Colors.grey[800], // Background color for loading widget
+  ),
+  appBarTheme: AppBarTheme(
+    color: Colors.grey[900],
+    foregroundColor: Colors.white,
+  ),
+  textButtonTheme: TextButtonThemeData(
+    style: TextButton.styleFrom(
+      foregroundColor: Colors.white,
     ),
-    textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(
-        foregroundColor:
-            Colors.white, // Default text color for TextButton in dark mode
-      ),
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor:
-            Colors.grey[800], // Background color for ElevatedButton
-        foregroundColor: Colors.white, // Text color for ElevatedButton
-      ),
-    ));
+  ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        textStyle: const TextStyle(fontSize: 20)),
+  ),
+);

@@ -6,11 +6,16 @@ class Loading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Access colors from the current theme
+    final theme = Theme.of(context);
+    final backgroundColor = theme.colorScheme.secondary; // Background color
+    final spinnerColor = theme.colorScheme.primary; // Spinner color
+
     return Container(
-      color: Colors.brown[100],
-      child: const Center(
+      color: backgroundColor,
+      child: Center(
         child: SpinKitDoubleBounce(
-          color: Colors.brown,
+          color: spinnerColor,
           size: 50.0,
         ),
       ),
