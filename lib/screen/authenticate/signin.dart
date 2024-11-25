@@ -20,11 +20,6 @@ class _SignInState extends ConsumerState<SignIn> {
   final TextEditingController passwordController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final authService = ref.read(authServiceProvider.notifier);
     final isLoading = ref.watch(authServiceProvider); // Watch the loading state
@@ -35,41 +30,49 @@ class _SignInState extends ConsumerState<SignIn> {
     return isLoading
         ? const Loading()
         : Scaffold(
+            resizeToAvoidBottomInset: true,
             body: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
                     theme.colorScheme.primaryContainer,
-                    theme.colorScheme.surface
+                    theme.colorScheme.surface,
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.topRight,
                 ),
               ),
-              padding: const EdgeInsets.only(top: 50, left: 30),
+              padding: const EdgeInsets.only(top: 100, left: 10),
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      const Text(
-                        "Welcome Back,\nLogin",
-                        // Optional: Aligns the text centrally
-                        style: TextStyle(
-                            fontSize: 30), // Optional: Add style as needed
-                      ),
-                      const Spacer(),
-                      switchButton(themeMode, themeNotifier),
-                    ],
+                  // Header Section
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 30),
+                    child: Row(
+                      children: [
+                        const Text(
+                          "Welcome Back,\nLogin",
+                          style: TextStyle(
+                            fontSize: 30,
+                          ),
+                        ),
+                        const Spacer(),
+                        switchButton(themeMode, themeNotifier),
+                      ],
+                    ),
                   ),
+                  // Content Section with border radius
                   Expanded(
                     child: Container(
-                        decoration: BoxDecoration(
-                            color: theme.colorScheme.surface,
-                            borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(50),
-                            )),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 20.0, horizontal: 50),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surface,
+                        borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(80),
+                        ),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 50.0, horizontal: 50),
+                      child: SingleChildScrollView(
                         child: Form(
                           key: _formKey,
                           child: Column(
@@ -78,9 +81,10 @@ class _SignInState extends ConsumerState<SignIn> {
                               TextFormField(
                                 controller: emailController,
                                 decoration: textInputDecoration.copyWith(
-                                    prefixIcon: const Icon(Icons.email),
-                                    hintText: 'Enter your email address',
-                                    labelText: 'Email'),
+                                  prefixIcon: const Icon(Icons.email),
+                                  hintText: 'Enter your email address',
+                                  labelText: 'Email',
+                                ),
                                 keyboardType: TextInputType.emailAddress,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -93,9 +97,10 @@ class _SignInState extends ConsumerState<SignIn> {
                               TextFormField(
                                 controller: passwordController,
                                 decoration: textInputDecoration.copyWith(
-                                    prefixIcon: const Icon(Icons.lock),
-                                    hintText: 'Enter your password',
-                                    labelText: 'Password'),
+                                  prefixIcon: const Icon(Icons.lock),
+                                  hintText: 'Enter your password',
+                                  labelText: 'Password',
+                                ),
                                 obscureText: true,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -104,7 +109,6 @@ class _SignInState extends ConsumerState<SignIn> {
                                   return null;
                                 },
                               ),
-                              const SizedBox(height: 10),
                               Align(
                                 alignment: Alignment.topRight,
                                 child: TextButton(
@@ -112,37 +116,42 @@ class _SignInState extends ConsumerState<SignIn> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              const ForgotPasswordPage()),
+                                        builder: (context) =>
+                                            const ForgotPasswordPage(),
+                                      ),
                                     );
                                   },
                                   child: const Text("Forgot Password?"),
                                 ),
                               ),
-                              const SizedBox(height: 10),
                               SizedBox(
                                 width: double.infinity,
                                 child: ElevatedButton(
-                                    onPressed: () async {
-                                      if (_formKey.currentState!.validate()) {
-                                        await authService
-                                            .signInWithEmailAndPassword(
-                                                emailController.text.trim(),
-                                                passwordController.text.trim());
-                                      }
-                                    },
-                                    child: const Text('Sign in')),
+                                  onPressed: () async {
+                                    if (_formKey.currentState!.validate()) {
+                                      await authService
+                                          .signInWithEmailAndPassword(
+                                        emailController.text.trim(),
+                                        passwordController.text.trim(),
+                                      );
+                                    }
+                                  },
+                                  child: const Text('Sign in'),
+                                ),
                               ),
                               const SizedBox(height: 20),
                               continueWith(
-                                  facebook: authService.signInWithFacebook,
-                                  google: authService.signInWithGoogle,
-                                  toggle: widget.toggleView,
-                                  regOrLogin: "REGISTER",
-                                  alreadyOrDont: "Don't")
+                                facebook: authService.signInWithFacebook,
+                                google: authService.signInWithGoogle,
+                                toggle: widget.toggleView,
+                                regOrLogin: "REGISTER",
+                                alreadyOrDont: "Don't",
+                              ),
                             ],
                           ),
-                        )),
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
