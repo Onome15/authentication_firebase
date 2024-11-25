@@ -30,113 +30,123 @@ class _SignInState extends ConsumerState<SignIn> {
     final isLoading = ref.watch(authServiceProvider); // Watch the loading state
     final themeNotifier = ref.read(themeNotifierProvider.notifier);
     final themeMode = ref.watch(themeNotifierProvider);
+    final theme = Theme.of(context);
 
     return isLoading
         ? const Loading()
         : Scaffold(
-            appBar: AppBar(
-              elevation: 0.0,
-              title: const Text('Sign in'),
-              actions: [
-                ElevatedButton.icon(
-                  onPressed: () {
-                    widget.toggleView();
-                  },
-                  icon: const Icon(Icons.person),
-                  label: const Text('Register'),
-                ),
-                switchButton(themeMode, themeNotifier)
-              ],
-            ),
             body: Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    theme.colorScheme.primaryContainer,
+                    theme.colorScheme.surface
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.topRight,
+                ),
+              ),
+              padding: const EdgeInsets.only(top: 50, left: 30),
+              child: Column(
+                children: [
+                  Row(
                     children: [
-                      const SizedBox(height: 20),
-                      TextFormField(
-                        controller: emailController,
-                        decoration: textInputDecoration.copyWith(
-                            prefixIcon: const Icon(Icons.email),
-                            hintText: 'Enter your email address',
-                            labelText: 'Email'),
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your email';
-                          }
-                          return null;
-                        },
+                      const Text(
+                        "Welcome Back,\nLogin",
+                        // Optional: Aligns the text centrally
+                        style: TextStyle(
+                            fontSize: 30), // Optional: Add style as needed
                       ),
-                      const SizedBox(height: 20),
-                      TextFormField(
-                        controller: passwordController,
-                        decoration: textInputDecoration.copyWith(
-                            prefixIcon: const Icon(Icons.lock),
-                            hintText: 'Enter your password',
-                            labelText: 'Password'),
-                        obscureText: true,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your password';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 10),
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ForgotPasswordPage()),
-                            );
-                          },
-                          child: const Text("Forgot Password?"),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                await authService.signInWithEmailAndPassword(
-                                    emailController.text.trim(),
-                                    passwordController.text.trim());
-                              }
-                            },
-                            child: const Text('Sign in')),
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          InkWell(
-                            onTap: authService.signInWithFacebook,
-                            child: Image.asset(
-                              'assets/signin/facebook.png',
-                              width: 50, // Adjust the size as needed
-                              height: 50,
-                            ),
-                          ),
-                          InkWell(
-                            onTap: authService.signInWithGoogle,
-                            child: Image.asset(
-                              'assets/signin/google.png',
-                              width: 50, // Adjust the size as needed
-                              height: 50,
-                            ),
-                          ),
-                        ],
-                      )
+                      const Spacer(),
+                      switchButton(themeMode, themeNotifier),
                     ],
                   ),
-                )),
+                  Expanded(
+                    child: Container(
+                        decoration: BoxDecoration(
+                            color: theme.colorScheme.surface,
+                            borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(50),
+                            )),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 20.0, horizontal: 50),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 20),
+                              TextFormField(
+                                controller: emailController,
+                                decoration: textInputDecoration.copyWith(
+                                    prefixIcon: const Icon(Icons.email),
+                                    hintText: 'Enter your email address',
+                                    labelText: 'Email'),
+                                keyboardType: TextInputType.emailAddress,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter your email';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 20),
+                              TextFormField(
+                                controller: passwordController,
+                                decoration: textInputDecoration.copyWith(
+                                    prefixIcon: const Icon(Icons.lock),
+                                    hintText: 'Enter your password',
+                                    labelText: 'Password'),
+                                obscureText: true,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter your password';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 10),
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ForgotPasswordPage()),
+                                    );
+                                  },
+                                  child: const Text("Forgot Password?"),
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                    onPressed: () async {
+                                      if (_formKey.currentState!.validate()) {
+                                        await authService
+                                            .signInWithEmailAndPassword(
+                                                emailController.text.trim(),
+                                                passwordController.text.trim());
+                                      }
+                                    },
+                                    child: const Text('Sign in')),
+                              ),
+                              const SizedBox(height: 20),
+                              continueWith(
+                                  facebook: authService.signInWithFacebook,
+                                  google: authService.signInWithGoogle,
+                                  toggle: widget.toggleView,
+                                  regOrLogin: "REGISTER",
+                                  alreadyOrDont: "Don't")
+                            ],
+                          ),
+                        )),
+                  ),
+                ],
+              ),
+            ),
           );
   }
 

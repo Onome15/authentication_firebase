@@ -129,14 +129,15 @@ class _RegisterState extends ConsumerState<Register> {
                         child: const Text('Register'),
                       ),
                     ),
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      const Text('Already have an account?'),
-                      TextButton(
-                          onPressed: () {
-                            widget.toggleView();
-                          },
-                          child: const Text("SIGN IN"))
-                    ])
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    continueWith(
+                        facebook: authService.signInWithFacebook,
+                        google: authService.signInWithGoogle,
+                        toggle: widget.toggleView,
+                        regOrLogin: "SIGN IN",
+                        alreadyOrDont: "Already")
                   ],
                 ),
               ),

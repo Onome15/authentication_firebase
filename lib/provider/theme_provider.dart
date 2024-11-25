@@ -22,12 +22,14 @@ final lightTheme = ThemeData(
     primarySwatch: Colors.blue,
     brightness: Brightness.light, // Match ThemeData.brightness
   ).copyWith(
-    surface: Colors.white, // Background color for loading widget
-    primary: Colors.blue[200],
-    secondary: Colors.white30, // Spinner color for loading widget
-  ),
+      surface: Colors.white, // Background color for loading widget
+      primary: Colors.blue[300],
+      secondary: Colors.white30,
+      primaryContainer: Colors.blue[300]
+      // Spinner color for loading widget
+      ),
   appBarTheme: AppBarTheme(
-    color: Colors.blue[200],
+    color: Colors.blue[300],
     foregroundColor: Colors.black,
   ),
   textButtonTheme: TextButtonThemeData(
@@ -37,7 +39,7 @@ final lightTheme = ThemeData(
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.blue[100],
+        backgroundColor: Colors.blue[300],
         foregroundColor: Colors.black,
         textStyle: const TextStyle(fontSize: 20)),
   ),
@@ -50,10 +52,12 @@ final darkTheme = ThemeData(
     primarySwatch: Colors.grey,
     brightness: Brightness.dark, // Match ThemeData.brightness
   ).copyWith(
-    surface: Colors.grey[800],
-    primary: Colors.white, // Spinner color for loading widget
-    secondary: Colors.grey[800], // Background color for loading widget
-  ),
+      surface: Colors.grey[800],
+      primary: Colors.white, // Spinner color for loading widget
+      secondary: Colors.grey[800],
+      primaryContainer: Colors.grey[900]
+      // Background color for loading widget
+      ),
   appBarTheme: AppBarTheme(
     color: Colors.grey[900],
     foregroundColor: Colors.white,
